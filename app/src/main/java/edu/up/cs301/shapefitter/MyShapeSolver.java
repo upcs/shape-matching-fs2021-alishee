@@ -10,6 +10,13 @@ import java.util.Arrays;
  */
 public class MyShapeSolver extends ShapeSolver {
 
+    private int worldHeight = world.length;
+    private int worldWidth = world[0].length;
+    private int shapeHeight = shape.length;
+    private int shapeWidth = shape[0].length;
+    private int maxIndex = shapeHeight-1;
+
+
     /**
      * Creates a solver for a particular problem.
      *
@@ -28,17 +35,17 @@ public class MyShapeSolver extends ShapeSolver {
      * undisplay can be made.
      */
     public void solve() {
-        int worldHeight = world.length;
-        int worldWidth = world[0].length;
-        int shapeHeight = shape.length;
-        int shapeWidth = shape[0].length;
+
 
         boolean[][] worldSegment = new boolean[shapeHeight][shapeWidth];
 
-        int i;
-        int j;
-        int ii;
-        int jj;
+
+        int i; //integer value for incrementing rows of shape
+        int j; //integer value for incrementing columns of shape
+        int ii; //integer value for incrementing rows of orientedShape
+        int jj; //integer value for incrementing columns of orientedShape
+
+        boolean[][] orientedShape; // 2 Dimensional boolean array equal to transformed shape
 
 
 
@@ -93,24 +100,121 @@ tested
         //display(3, 4, Orientation.ROTATE_CLOCKWISE);
 
     /**
-     * Creates a new array of the array shape to the specified orientation.
+     * Creates a new 2-Dimensional boolean array of the array 'shape' to the specified orientation.
+     *
      * @param orient the desired orientation of the new shape
      * @return a new 2-Dimensional boolean array containing the transformed shape
      */
     public boolean[][] changeOrientation(Orientation orient) {
+
+        int i; //integer value for incrementing rows of shape
+        int j; //integer value for incrementing columns of shape
+
+
+        /* Creates a two dimensional array of booleans the same size as shape*/
+        boolean[][] orientedShape = new boolean[shape.length][shape[0].length];
+
+        /* Creates a two dimensional array of booleans to hold the reversed copy
+         of orientedShape or shape for reversed transformations*/
+        boolean[][] reversedShape;
+
+
+        //Switch to parse which transformation to
+        switch (orient) {
+            case ROTATE_NONE:
+                return orientedShape;
+
+            case ROTATE_CLOCKWISE:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[j][maxIndex-i] = shape[i][j];
+                    }
+                }
+                return orientedShape;
+
+            case ROTATE_180:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[maxIndex-i][maxIndex-j] = shape[i][j];
+                    }
+                }
+                return orientedShape;
+
+            case ROTATE_COUNTERCLOCKWISE:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[maxIndex-j][i] = shape[i][j];
+                    }
+                }
+                return orientedShape;
+
+            case ROTATE_NONE_REV:
+                return reverse(shape);
+
+            case ROTATE_CLOCKWISE_REV:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[j][maxIndex-i] = shape[i][j];
+                    }
+                }
+                reversedShape = reverse(orientedShape);
+                return reversedShape;
+
+            case ROTATE_180_REV:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[maxIndex-i][maxIndex-j] = shape[i][j];
+                    }
+                }
+                reversedShape = reverse(orientedShape);
+                return reversedShape;
+
+            case ROTATE_COUNTERCLOCKWISE_REV:
+                for (i = 0; i < shapeHeight; i++ ) {
+                    for (j = 0; j < shapeWidth; j++) {
+                        orientedShape[maxIndex-j][i] = shape[i][j];
+                    }
+                }
+                reversedShape = reverse(orientedShape);
+                return reversedShape;
+
+        }
+
         //use switch statement followed by for loop to transform shape into new array
         return null;
     }
 
 
     /**
+     * Finds the possible unique orientations of a particular shape
      *
-     * @return
+     * @return returns an array of possible
      */
-    public Orientation[] discreteOrientations() {
+    private Orientation[] discreteOrientations() {
         //
         return null;
 
+    }
+
+    /**
+     * Transforms the supplied array to a left-right reflection of itself.
+     *
+     * @param shapeInstance the shape to transform
+     * @return a 2-Dimensional boolean array that is a left-right reflection of shapeInstance
+     */
+    private boolean[][] reverse(boolean[][] shapeInstance) {
+        int i;
+        int j;
+
+        boolean[][] revShape = new boolean[shapeHeight][shapeWidth];
+
+        for (i = 0; i < shapeHeight; i++) {
+            for (j = 0; j < shapeWidth; j++) {
+                revShape[i][maxIndex - j] = shapeInstance[i][j];
+            }
+        }
+
+        return revShape;
     }
 
 
