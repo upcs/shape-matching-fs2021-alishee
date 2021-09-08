@@ -1,5 +1,7 @@
 package edu.up.cs301.shapefitter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -46,42 +48,84 @@ public class MyShapeSolver extends ShapeSolver {
         int jj; //integer value for incrementing columns of orientedShape
 
         boolean[][] orientedShape; // 2 Dimensional boolean array equal to transformed shape
+        Orientation currOrientation = Orientation.ROTATE_CLOCKWISE;
 
+        orientedShape = changeOrientation(Orientation.ROTATE_COUNTERCLOCKWISE);
 
+        Orientation[] diffOrientations = discreteOrientations();
 
+        int o;
         boolean shapeFound = false;
-        if (shapeHeight < worldHeight && shapeWidth < worldWidth) {
 
+        for(o = 0; o < diffOrientations.length; o++) {
 
+            currOrientation = diffOrientations[o];
+            if ( currOrientation != null) {
 
-            for (i=0; i < worldHeight - shapeHeight + 1; i++) {
-                for ( j = 0; j < worldWidth - shapeWidth + 1; j++) {
-                    //Maybe use stream to copy a smaller array into worldSegment??
+                orientedShape = changeOrientation(currOrientation); // figure out how to do this
+//            display(0, 0, currOrientation);
 
+                //make sure shape is smaller than world before continuing
+                if (shapeHeight < worldHeight && shapeWidth < worldWidth) {
 
-                    for (ii = 0; ii < shapeHeight; ii++) {
-                        for (jj = 0; jj < shapeWidth; jj++) {
-                            worldSegment[ii][jj] = world[i+ii][j+jj];
+                    //create a segment of world that is equal in size to shape to compare shape to
+                    for (i = 0; i < worldHeight - shapeHeight + 1; i++) {
+                        for (j = 0; j < worldWidth - shapeWidth + 1; j++) {
+
+                            //set the values of worldsegment equal to the corresponding values of world
+                            for (ii = 0; ii < shapeHeight; ii++) {
+                                for (jj = 0; jj < shapeWidth; jj++) {
+                                    worldSegment[ii][jj] = world[i + ii][j + jj];
+                                }
+                            }
+
+                            //compare the oriented shape and worldSegment with deep equals
+                            if (Arrays.deepEquals(worldSegment, orientedShape)) {
+                                display(i, j, currOrientation);
+                                shapeFound = true;
+                            }
+                            if (!shapeFound) {
+                                undisplay();
+                            }
+                            //Return boolean or int saying whether equal
+                            //use i and j for display if equal
+
                         }
                     }
-                    //compare shape and worldSegment
-                    if(Arrays.deepEquals(worldSegment,shape)) {
-                        display(i, j, Orientation.ROTATE_NONE);
-                        shapeFound = true;
-                    }
-                    if(!shapeFound) {
-                        undisplay();
-                    }
-                    //Return boolean or int saying whether equal
-                    //use i and j for display if equal
+
 
                 }
             }
-
-
-
         }
-
+//        if (shapeHeight < worldHeight && shapeWidth < worldWidth) {
+//
+//            //create a segment of world that is equal in size to shape to compare shape to
+//            for (i = 0; i < worldHeight - shapeHeight + 1; i++) {
+//                for (j = 0; j < worldWidth - shapeWidth + 1; j++) {
+//
+//                    //set the values of worldsegment equal to the corresponding values of world
+//                    for (ii = 0; ii < shapeHeight; ii++) {
+//                        for (jj = 0; jj < shapeWidth; jj++) {
+//                            worldSegment[ii][jj] = world[i + ii][j + jj];
+//                        }
+//                    }
+//
+//                    //compare the oriented shape and worldSegment with deep equals
+//                    if (Arrays.deepEquals(worldSegment, orientedShape)) {
+//                        display(i, j, Orientation.ROTATE_COUNTERCLOCKWISE);
+//                        shapeFound = true;
+//                    }
+//                    if (!shapeFound) {
+//                        undisplay();
+//                    }
+//                    //Return boolean or int saying whether equal
+//                    //use i and j for display if equal
+//
+//                }
+//            }
+//
+//
+//        }
     }
 
     /*
@@ -122,7 +166,7 @@ tested
         //Switch to parse which transformation to
         switch (orient) {
             case ROTATE_NONE:
-                return orientedShape;
+                return shape;
 
             case ROTATE_CLOCKWISE:
                 for (i = 0; i < shapeHeight; i++ ) {
@@ -188,11 +232,44 @@ tested
     /**
      * Finds the possible unique orientations of a particular shape
      *
-     * @return returns an array of possible
+     * @return returns an ArrayList of all different Orientations a shape can have
      */
     private Orientation[] discreteOrientations() {
-        //
-        return null;
+        int i;
+        Orientation[] discreteOri = new Orientation[8];
+
+        discreteOri[0]=(Orientation.ROTATE_NONE);
+
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_CLOCKWISE))) {
+            discreteOri[1] =(Orientation.ROTATE_CLOCKWISE);
+        } else { discreteOri[1] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_180))) {
+            discreteOri[2] =(Orientation.ROTATE_180);
+        } else { discreteOri[2] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_COUNTERCLOCKWISE))) {
+            discreteOri[3] =(Orientation.ROTATE_CLOCKWISE);
+        } else { discreteOri[3] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_NONE_REV))) {
+            discreteOri[4] =(Orientation.ROTATE_NONE_REV);
+        } else {discreteOri[4] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_CLOCKWISE_REV))) {
+            discreteOri[5] =(Orientation.ROTATE_COUNTERCLOCKWISE_REV);
+        } else {discreteOri[5] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_180_REV))) {
+            discreteOri[6] =(Orientation.ROTATE_180_REV);
+        } else {discreteOri[6] = null; }
+
+        if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_COUNTERCLOCKWISE_REV))) {
+            discreteOri[7] =(Orientation.ROTATE_COUNTERCLOCKWISE_REV);
+        } else {discreteOri[7] = null; }
+
+        return discreteOri;
 
     }
 
