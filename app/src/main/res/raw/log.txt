@@ -1,1 +1,13 @@
 Log your changes here.
+
+
+I tried to do the code in ShapeSolver because I'm dyslexic. Fixing this problem required no resources.
+
+Tried using an ArrayList<Orientation> but realized I forgot how to use them and switched back to Arrays. Spent a while looking at
+https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html
+But didn't end up using the ArrayList
+
+Somehow every orientation works except the clockwise ones?????? Scrap paper is being abused at the moment.
+confusion visualized in clockwisevisualization.png
+Supposing clockwise visualization is correct, the code in changeOrientation is correct
+

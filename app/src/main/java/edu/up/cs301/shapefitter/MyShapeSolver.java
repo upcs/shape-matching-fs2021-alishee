@@ -38,7 +38,7 @@ public class MyShapeSolver extends ShapeSolver {
      */
     public void solve() {
 
-
+        //create a 2-D boolean array of the same size as shape.
         boolean[][] worldSegment = new boolean[shapeHeight][shapeWidth];
 
 
@@ -48,25 +48,25 @@ public class MyShapeSolver extends ShapeSolver {
         int jj; //integer value for incrementing columns of orientedShape
 
         boolean[][] orientedShape; // 2 Dimensional boolean array equal to transformed shape
-        Orientation currOrientation = Orientation.ROTATE_CLOCKWISE;
+        Orientation currOrientation;
 
-        orientedShape = changeOrientation(Orientation.ROTATE_COUNTERCLOCKWISE);
-
+        //an array of NULL and valid, distinct orientations
         Orientation[] diffOrientations = discreteOrientations();
 
-        int o;
-        boolean shapeFound = false;
+        int o; // integer value used to increment orientation
+        boolean shapeFound = false; // boolean variable for whether shape matches world segment
 
+        // use a for loop to check all different orientations given by discreteOrientations
         for(o = 0; o < diffOrientations.length; o++) {
 
             currOrientation = diffOrientations[o];
             if ( currOrientation != null) {
 
-                orientedShape = changeOrientation(currOrientation); // figure out how to do this
-//            display(0, 0, currOrientation);
+                //transform shape using orientedShape array to desired orientation before comparison begins
+                orientedShape = changeOrientation(currOrientation);
 
                 //make sure shape is smaller than world before continuing
-                if (shapeHeight < worldHeight && shapeWidth < worldWidth) {
+                if (shapeHeight <= worldHeight && shapeWidth <= worldWidth) {
 
                     //create a segment of world that is equal in size to shape to compare shape to
                     for (i = 0; i < worldHeight - shapeHeight + 1; i++) {
@@ -80,9 +80,11 @@ public class MyShapeSolver extends ShapeSolver {
                             }
 
                             //compare the oriented shape and worldSegment with deep equals
+                            //call display and exit solve() if equals
                             if (Arrays.deepEquals(worldSegment, orientedShape)) {
                                 display(i, j, currOrientation);
                                 shapeFound = true;
+                                return;
                             }
                             if (!shapeFound) {
                                 undisplay();
@@ -97,51 +99,9 @@ public class MyShapeSolver extends ShapeSolver {
                 }
             }
         }
-//        if (shapeHeight < worldHeight && shapeWidth < worldWidth) {
-//
-//            //create a segment of world that is equal in size to shape to compare shape to
-//            for (i = 0; i < worldHeight - shapeHeight + 1; i++) {
-//                for (j = 0; j < worldWidth - shapeWidth + 1; j++) {
-//
-//                    //set the values of worldsegment equal to the corresponding values of world
-//                    for (ii = 0; ii < shapeHeight; ii++) {
-//                        for (jj = 0; jj < shapeWidth; jj++) {
-//                            worldSegment[ii][jj] = world[i + ii][j + jj];
-//                        }
-//                    }
-//
-//                    //compare the oriented shape and worldSegment with deep equals
-//                    if (Arrays.deepEquals(worldSegment, orientedShape)) {
-//                        display(i, j, Orientation.ROTATE_COUNTERCLOCKWISE);
-//                        shapeFound = true;
-//                    }
-//                    if (!shapeFound) {
-//                        undisplay();
-//                    }
-//                    //Return boolean or int saying whether equal
-//                    //use i and j for display if equal
-//
-//                }
-//            }
-//
-//
-//        }
     }
 
-    /*
-    GOAL: OPTIMIZE solve()
- For example, if the shape is a square, no orientations
-other than the unrotated one should be tested, since a square is identical to itself no matter
-how it is rotated (in the 90-degree sense) or reflected; a vertical line would require that
-only two orientations be tested; a “T” shape would require only four orientations to be
-tested
-     */
 
-
-
-        // ****dummied up****
-        // always "finds" a solution at row 3, column 4, with a 90-degree clockwise orientation
-        //display(3, 4, Orientation.ROTATE_CLOCKWISE);
 
     /**
      * Creates a new 2-Dimensional boolean array of the array 'shape' to the specified orientation.
@@ -163,7 +123,7 @@ tested
         boolean[][] reversedShape;
 
 
-        //Switch to parse which transformation to
+        //Switch to return array in desired orientation
         switch (orient) {
             case ROTATE_NONE:
                 return shape;
@@ -230,19 +190,18 @@ tested
 
 
     /**
-     * Finds the possible unique orientations of a particular shape
+     * Finds the possible unique orientations of a particular shape as compared to base shape
      *
-     * @return returns an ArrayList of all different Orientations a shape can have
+     * @return returns an Orientation array with unique orientations and NULL values where the array would be redundant
      */
     private Orientation[] discreteOrientations() {
-        int i;
         Orientation[] discreteOri = new Orientation[8];
 
         discreteOri[0]=(Orientation.ROTATE_NONE);
 
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_CLOCKWISE))) {
-            discreteOri[1] =(Orientation.ROTATE_CLOCKWISE);
+            discreteOri[1] = (Orientation.ROTATE_CLOCKWISE);
         } else { discreteOri[1] = null; }
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_180))) {
