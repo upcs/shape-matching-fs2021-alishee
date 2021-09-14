@@ -14,3 +14,5 @@ Somehow every orientation works except the clockwise ones?????? Scrap paper is b
 confusion visualized in clockwisevisualization.png
 Supposing clockwise visualization is correct, the code in changeOrientation is correct
 
+Fixed clockwise issue with help from Prof Ben Tribelhorn. Used wrong variables on lines 220 ish of MyShapeSolver
+
