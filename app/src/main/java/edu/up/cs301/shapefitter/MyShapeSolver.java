@@ -123,7 +123,7 @@ public class MyShapeSolver extends ShapeSolver {
         boolean[][] reversedShape;
 
 
-        //Switch to return array in desired orientation
+        //Switch to return array in desired orientation using for loop
         switch (orient) {
             case ROTATE_NONE:
                 return shape;
@@ -209,7 +209,7 @@ public class MyShapeSolver extends ShapeSolver {
         } else { discreteOri[2] = null; }
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_COUNTERCLOCKWISE))) {
-            discreteOri[3] =(Orientation.ROTATE_CLOCKWISE);
+            discreteOri[3] =(Orientation.ROTATE_COUNTERCLOCKWISE);
         } else { discreteOri[3] = null; }
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_NONE_REV))) {
@@ -217,7 +217,7 @@ public class MyShapeSolver extends ShapeSolver {
         } else {discreteOri[4] = null; }
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_CLOCKWISE_REV))) {
-            discreteOri[5] =(Orientation.ROTATE_COUNTERCLOCKWISE_REV);
+            discreteOri[5] =(Orientation.ROTATE_CLOCKWISE_REV);
         } else {discreteOri[5] = null; }
 
         if(!Arrays.deepEquals(shape, changeOrientation(Orientation.ROTATE_180_REV))) {

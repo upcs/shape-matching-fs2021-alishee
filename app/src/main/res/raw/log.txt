@@ -3,6 +3,9 @@ Log your changes here.
 
 I tried to do the code in ShapeSolver because I'm dyslexic. Fixing this problem required no resources.
 
+Totally forgot how case structure works:
+https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
+
 Tried using an ArrayList<Orientation> but realized I forgot how to use them and switched back to Arrays. Spent a while looking at
 https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html
 But didn't end up using the ArrayList
